@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ivan Ivankov](https://up.htmlacademy.ru/javascript/12/user/286023).
-* Наставник: `Неизвестно`.
+* Наставник: [Филипп Шамсиев](https://up.htmlacademy.ru/javascript/12/user/70260).
 
 ---
 
