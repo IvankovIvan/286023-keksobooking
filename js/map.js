@@ -139,6 +139,7 @@ var addOffers = function () {
       var img = liNode.querySelector('img');
       img.src = photo;
       img.height = '50';
+      img.width = '50';
       popupPictures.appendChild(liNode);
     });
     popupPictures.removeChild(popupPictures.querySelector('li'));
