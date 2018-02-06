@@ -17,24 +17,18 @@ var GUESTS_MIN = 1;
 var GUESTS_MAX = 10;
 var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
-var FEATURESES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS_MIN = 1;
 var PHOTOS_MAX = 3;
-var SHIFT_X = -25;
-var SHIFT_Y = -50;
+var SHIFT_X = 0;
+var SHIFT_Y = -35;
 
 var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-
-
-// Возвращает случайное число между min (включительно) и max (не включая max)
-var getRandomArbitrary = function (min, max) {
-  return Math.random() * (max - min) + min;
-};
 
 // Возвращает случайное целое число между min (включительно) и max (не включая max)
 // Использование метода Math.round() даст вам неравномерное распределение!
 var getRandomInt = function (min, max) {
-  return Math.floor(getRandomArbitrary(min, max));
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 // возвращает массив последовательность чисел
@@ -83,7 +77,7 @@ var createOfferNew = function (avatarNumberFreeArray) {
       guests: getRandomInt(GUESTS_MIN, GUESTS_MAX),
       checkin: CHECKINS[getRandomInt(0, CHECKINS.length - 1)],
       checkout: CHECKOUTS[getRandomInt(0, CHECKOUTS.length - 1)],
-      features: FEATURESES.slice(0, getRandomInt(0, FEATURESES.length)),
+      features: FEATURES.slice(0, getRandomInt(0, FEATURES.length)),
       description: '',
       photos: getPhotoArr()
     },
@@ -125,30 +119,31 @@ var addOffers = function () {
     article.querySelector('.popup__avatar').src = offer.author.avatar;
     article.querySelector('h3').textContent = offer.offer.title;
     article.querySelector('p small').textContent = offer.offer.address;
-    article.querySelector('.popup__price').textContent = offer.offer.price + '&#x20bd;/ночь';
+    article.querySelector('.popup__price').innerHTML = offer.offer.price + '&#x20bd;/ночь';
     article.querySelector('h4').textContent = HOUSES_TYPE_RUS[offer.offer.type];
     article.querySelector('p:nth-of-type(3)').textContent = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
     article.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
-    var ulNodeCurent = article.querySelector('.popup__features');
-    var ulNodeNew = ulNodeCurent.cloneNode();
-    offer.offer.features.forEach(function (feature) {
-      ulNodeNew.appendChild(article.querySelector('.feature--' + feature));
+
+    var popupFeatures = article.querySelector('.popup__features');
+    FEATURES.forEach(function (feature) {
+      if (offer.offer.features.indexOf(feature) < 0) {
+        popupFeatures.removeChild(popupFeatures.querySelector('.feature--' + feature));
+      }
     });
-    article.replaceChild(ulNodeNew, ulNodeCurent);
+
     article.querySelector('p:nth-of-type(5)').textContent = offer.offer.description;
 
-    var ulPopupPicturesCurent = article.querySelector('.popup__pictures');
-    var ulPopupPicturesNew = ulPopupPicturesCurent.cloneNode();
+    var popupPictures = article.querySelector('.popup__pictures');
     offer.offer.photos.forEach(function (photo) {
-      var liNode = ulPopupPicturesCurent.querySelector('li').cloneNode(true);
+      var liNode = popupPictures.querySelector('li').cloneNode(true);
       var img = liNode.querySelector('img');
       img.src = photo;
       img.height = '50';
-      ulPopupPicturesNew.appendChild(liNode);
+      popupPictures.appendChild(liNode);
     });
-    article.replaceChild(ulPopupPicturesNew, ulPopupPicturesCurent);
+    popupPictures.removeChild(popupPictures.querySelector('li'));
 
-    fragment.appendChild(article.cloneNode(true));
+    fragment.appendChild(article);
     divMap.appendChild(fragment);
   });
 };
