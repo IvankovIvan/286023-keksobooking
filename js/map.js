@@ -20,7 +20,6 @@ var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS_MIN = 1;
 var PHOTOS_MAX = 3;
-var SHIFT_X = 0;
 var SHIFT_Y = -35;
 
 var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -102,7 +101,7 @@ var addButtonsAvatar = function () {
   var fragment = document.createDocumentFragment();
   var button = template.querySelector('.map__pin');
   offers.forEach(function (offer) {
-    button.style.left = offer.location.x + SHIFT_X + 'px';
+    button.style.left = offer.location.x + 'px';
     button.style.top = offer.location.y + SHIFT_Y + 'px';
     button.querySelector('img').src = offer.author.avatar;
     fragment.appendChild(button.cloneNode(true));
