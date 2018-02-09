@@ -7,7 +7,7 @@ var LOCATION_X_MIN = 300;
 var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 150;
 var LOCATION_Y_MAX = 500;
-var FIRST_POINT = {x: 600, y: 325};
+var FIRST_POINT = {x: 377, y: 430};
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 var HOUSES_TYPE = ['flat', 'house', 'bungalo'];
@@ -115,20 +115,18 @@ var onClosePopupClick = function () {
   removeOffer();
 };
 
-var onButtonAvatarClick = function (evt) {
+var onAvatarClick = function (evt) {
+
   removeOffer();
-  var id = evt.currentTarget.dataset.id || -1;
+  var id = evt.target.closest('.map__pin').dataset.id || -1;
   if (id > -1) {
     addOffer(id);
     map.querySelector('.popup__close').addEventListener('click', onClosePopupClick);
   }
 };
 
-var addButtonsAvatarClick = function () {
-  var buttons = map.querySelectorAll('.map__pin');
-  buttons.forEach(function (button) {
-    button.addEventListener('click', onButtonAvatarClick);
-  });
+var addDivAvatarClick = function () {
+  map.querySelector('.map__pins').addEventListener('click', onAvatarClick);
 };
 
 var removeOffer = function () {
@@ -141,28 +139,27 @@ var removeOffer = function () {
 // добавления данных о предложениях
 var addOffer = function (idOffer) {
   var fragment = document.createDocumentFragment();
-  var divMap = document.querySelector('.map');
-  var offer = offers[idOffer];
+  var offerCurrent = offers[idOffer];
   var article = template.querySelector('article.map__card').cloneNode(true);
-  article.querySelector('.popup__avatar').src = offer.author.avatar;
-  article.querySelector('h3').textContent = offer.offer.title;
-  article.querySelector('p small').textContent = offer.offer.address;
-  article.querySelector('.popup__price').innerHTML = offer.offer.price + '&#x20bd;/ночь';
-  article.querySelector('h4').textContent = HOUSES_TYPE_RUS[offer.offer.type];
-  article.querySelector('p:nth-of-type(3)').textContent = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
-  article.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+  article.querySelector('.popup__avatar').src = offerCurrent.author.avatar;
+  article.querySelector('h3').textContent = offerCurrent.offer.title;
+  article.querySelector('p small').textContent = offerCurrent.offer.address;
+  article.querySelector('.popup__price').innerHTML = offerCurrent.offer.price + '&#x20bd;/ночь';
+  article.querySelector('h4').textContent = HOUSES_TYPE_RUS[offerCurrent.offer.type];
+  article.querySelector('p:nth-of-type(3)').textContent = offerCurrent.offer.rooms + ' комнаты для ' + offerCurrent.offer.guests + ' гостей';
+  article.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + offerCurrent.offer.checkin + ', выезд до ' + offerCurrent.offer.checkout;
 
   var popupFeatures = article.querySelector('.popup__features');
   FEATURES.forEach(function (feature) {
-    if (offer.offer.features.indexOf(feature) < 0) {
+    if (offerCurrent.offer.features.indexOf(feature) < 0) {
       popupFeatures.removeChild(popupFeatures.querySelector('.feature--' + feature));
     }
   });
 
-  article.querySelector('p:nth-of-type(5)').textContent = offer.offer.description;
+  article.querySelector('p:nth-of-type(5)').textContent = offerCurrent.offer.description;
 
   var popupPictures = article.querySelector('.popup__pictures');
-  offer.offer.photos.forEach(function (photo) {
+  offerCurrent.offer.photos.forEach(function (photo) {
     var liNode = popupPictures.querySelector('li').cloneNode(true);
     var img = liNode.querySelector('img');
     img.src = photo;
@@ -173,7 +170,7 @@ var addOffer = function (idOffer) {
   popupPictures.removeChild(popupPictures.querySelector('li'));
 
   fragment.appendChild(article);
-  divMap.appendChild(fragment);
+  map.appendChild(fragment);
 };
 
 var enableViewMap = function () {
@@ -182,9 +179,8 @@ var enableViewMap = function () {
   notice.querySelectorAll('fieldset').forEach(function (note) {
     note.classList.remove('disabled');
   });
-  notice.querySelector('#address').value = FIRST_POINT.x + '; ' + FIRST_POINT.y;
   addButtonsAvatar();
-  addButtonsAvatarClick();
+  addDivAvatarClick();
 };
 
 // последовательность свободных номеров аватаров
@@ -194,6 +190,7 @@ var offers = createOffers(avatarNumberFreeArray);
 
 var map = document.querySelector('.map');
 var notice = document.querySelector('.notice');
+notice.querySelector('#address').value = FIRST_POINT.x + '; ' + FIRST_POINT.y;
 var mapPinMain = map.querySelector('.map__pin--main');
 mapPinMain.addEventListener('mouseup', enableViewMap);
 
