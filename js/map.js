@@ -12,10 +12,12 @@ var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 var HOUSES_TYPE = ['flat', 'house', 'bungalo'];
 var HOUSES_TYPE_RUS = {flat: 'Квартира', bungalo: 'Бунгало', house: 'Дом'};
+var HOUSES_MIN_PRICE = {flat: 1000, bungalo: 0, house: 5000};
 var ROOMS_MIN = 1;
 var ROOMS_MAX = 5;
 var GUESTS_MIN = 1;
 var GUESTS_MAX = 10;
+var ROOM_VS_GUESTS = {'1': [1], '2': [1, 2], '3': [1, 2, 3], '100': [0]};
 var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -186,6 +188,20 @@ var enableViewMap = function () {
   addDivAvatarClick();
 };
 
+var setPriceMin = function (value) {
+  notice.querySelector('#price').min = HOUSES_MIN_PRICE[value];
+};
+
+var onRoomNumberInvalid = function (evt) {
+  var roomNumberCurrent = evt.target;
+  var capacityValue = notice.querySelector('#capacity').value;
+  if (ROOM_VS_GUESTS[roomNumberCurrent.value].indexOf(parseInt(capacityValue, 10)) < 0) {
+    roomNumberCurrent.setCustomValidity('Не верно выбрано кол-во гостей!');
+  } else {
+    roomNumberCurrent.setCustomValidity('');
+  }
+};
+
 // последовательность свободных номеров аватаров
 var avatarNumberFreeArray = createArraySequence(AVATAR_MIN_NUMBER, AVATAR_MAX_NUMBER);
 // создания массива предлоежений
@@ -193,9 +209,15 @@ var offers = createOffers(avatarNumberFreeArray);
 
 var map = document.querySelector('.map');
 var notice = document.querySelector('.notice');
-notice.querySelector('#address').value = FIRST_POINT.x + '; ' + FIRST_POINT.y;
+notice.querySelector('#address').value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
 var mapPinMain = map.querySelector('.map__pin--main');
 mapPinMain.addEventListener('mouseup', enableViewMap);
 
 var template = document.querySelector('template').content;
 var divButtonPing = document.querySelector('.map__pins');
+
+notice.querySelector('#type').addEventListener('change', function (evt) {
+  setPriceMin(evt.target.value);
+});
+
+notice.querySelector('#room_number').addEventListener('invalid', onRoomNumberInvalid);
