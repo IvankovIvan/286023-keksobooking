@@ -7,6 +7,7 @@ var LOCATION_X_MIN = 300;
 var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 150;
 var LOCATION_Y_MAX = 500;
+var FIRST_POINT = {x: 377, y: 430};
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 var HOUSES_TYPE = ['flat', 'house', 'bungalo'];
@@ -100,52 +101,89 @@ var createOffers = function (avatarNumberFreeArray) {
 var addButtonsAvatar = function () {
   var fragment = document.createDocumentFragment();
   var button = template.querySelector('.map__pin');
-  offers.forEach(function (offer) {
+  offers.forEach(function (offer, i) {
     button.style.left = offer.location.x + 'px';
     button.style.top = offer.location.y + SHIFT_Y + 'px';
+    button.dataset.id = i;
     button.querySelector('img').src = offer.author.avatar;
     fragment.appendChild(button.cloneNode(true));
   });
   divButtonPing.appendChild(fragment);
 };
 
+var onClosePopupClick = function () {
+  removeOffer();
+};
+
+var onAvatarClick = function (evt) {
+
+  removeOffer();
+  var button = evt.target.closest('.map__pin');
+  if (button && button.tagName === 'BUTTON') {
+    var id = evt.target.closest('.map__pin').dataset.id || -1;
+    if (id > -1) {
+      addOffer(id);
+      map.querySelector('.popup__close').addEventListener('click', onClosePopupClick);
+    }
+  }
+};
+
+var addDivAvatarClick = function () {
+  map.querySelector('.map__pins').addEventListener('click', onAvatarClick);
+};
+
+var removeOffer = function () {
+  if (map.querySelector('.map__card')) {
+    map.querySelector('.popup__close').removeEventListener('click', onClosePopupClick);
+    map.querySelector('.map__card').remove();
+  }
+};
+
 // добавления данных о предложениях
-var addOffers = function () {
+var addOffer = function (idOffer) {
   var fragment = document.createDocumentFragment();
-  var divMap = document.querySelector('.map');
-  offers.forEach(function (offer) {
-    var article = template.querySelector('article.map__card').cloneNode(true);
-    article.querySelector('.popup__avatar').src = offer.author.avatar;
-    article.querySelector('h3').textContent = offer.offer.title;
-    article.querySelector('p small').textContent = offer.offer.address;
-    article.querySelector('.popup__price').innerHTML = offer.offer.price + '&#x20bd;/ночь';
-    article.querySelector('h4').textContent = HOUSES_TYPE_RUS[offer.offer.type];
-    article.querySelector('p:nth-of-type(3)').textContent = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
-    article.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+  var offerCurrent = offers[idOffer];
+  var article = template.querySelector('article.map__card').cloneNode(true);
+  article.querySelector('.popup__avatar').src = offerCurrent.author.avatar;
+  article.querySelector('h3').textContent = offerCurrent.offer.title;
+  article.querySelector('p small').textContent = offerCurrent.offer.address;
+  article.querySelector('.popup__price').innerHTML = offerCurrent.offer.price + '&#x20bd;/ночь';
+  article.querySelector('h4').textContent = HOUSES_TYPE_RUS[offerCurrent.offer.type];
+  article.querySelector('p:nth-of-type(3)').textContent = offerCurrent.offer.rooms + ' комнаты для ' + offerCurrent.offer.guests + ' гостей';
+  article.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + offerCurrent.offer.checkin + ', выезд до ' + offerCurrent.offer.checkout;
 
-    var popupFeatures = article.querySelector('.popup__features');
-    FEATURES.forEach(function (feature) {
-      if (offer.offer.features.indexOf(feature) < 0) {
-        popupFeatures.removeChild(popupFeatures.querySelector('.feature--' + feature));
-      }
-    });
-
-    article.querySelector('p:nth-of-type(5)').textContent = offer.offer.description;
-
-    var popupPictures = article.querySelector('.popup__pictures');
-    offer.offer.photos.forEach(function (photo) {
-      var liNode = popupPictures.querySelector('li').cloneNode(true);
-      var img = liNode.querySelector('img');
-      img.src = photo;
-      img.height = '50';
-      img.width = '50';
-      popupPictures.appendChild(liNode);
-    });
-    popupPictures.removeChild(popupPictures.querySelector('li'));
-
-    fragment.appendChild(article);
-    divMap.appendChild(fragment);
+  var popupFeatures = article.querySelector('.popup__features');
+  FEATURES.forEach(function (feature) {
+    if (offerCurrent.offer.features.indexOf(feature) < 0) {
+      popupFeatures.removeChild(popupFeatures.querySelector('.feature--' + feature));
+    }
   });
+
+  article.querySelector('p:nth-of-type(5)').textContent = offerCurrent.offer.description;
+
+  var popupPictures = article.querySelector('.popup__pictures');
+  offerCurrent.offer.photos.forEach(function (photo) {
+    var liNode = popupPictures.querySelector('li').cloneNode(true);
+    var img = liNode.querySelector('img');
+    img.src = photo;
+    img.height = '50';
+    img.width = '50';
+    popupPictures.appendChild(liNode);
+  });
+  popupPictures.removeChild(popupPictures.querySelector('li'));
+
+  fragment.appendChild(article);
+  map.appendChild(fragment);
+};
+
+var enableViewMap = function () {
+  map.classList.remove('map--faded');
+  notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+  notice.querySelectorAll('fieldset').forEach(function (note) {
+    note.classList.remove('disabled');
+  });
+  addButtonsAvatar();
+  addDivAvatarClick();
 };
 
 // последовательность свободных номеров аватаров
@@ -154,10 +192,10 @@ var avatarNumberFreeArray = createArraySequence(AVATAR_MIN_NUMBER, AVATAR_MAX_NU
 var offers = createOffers(avatarNumberFreeArray);
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+var notice = document.querySelector('.notice');
+notice.querySelector('#address').value = FIRST_POINT.x + '; ' + FIRST_POINT.y;
+var mapPinMain = map.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mouseup', enableViewMap);
 
 var template = document.querySelector('template').content;
 var divButtonPing = document.querySelector('.map__pins');
-
-addButtonsAvatar();
-addOffers();
