@@ -118,10 +118,13 @@ var onClosePopupClick = function () {
 var onAvatarClick = function (evt) {
 
   removeOffer();
-  var id = evt.target.closest('.map__pin').dataset.id || -1;
-  if (id > -1) {
-    addOffer(id);
-    map.querySelector('.popup__close').addEventListener('click', onClosePopupClick);
+  var button = evt.target.closest('.map__pin');
+  if (button !== null && button.tagName === 'BUTTON') {
+    var id = evt.target.closest('.map__pin').dataset.id || -1;
+    if (id > -1) {
+      addOffer(id);
+      map.querySelector('.popup__close').addEventListener('click', onClosePopupClick);
+    }
   }
 };
 
