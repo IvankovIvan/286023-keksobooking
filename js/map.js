@@ -119,7 +119,7 @@ var onAvatarClick = function (evt) {
 
   removeOffer();
   var button = evt.target.closest('.map__pin');
-  if (button !== null && button.tagName === 'BUTTON') {
+  if (button && button.tagName === 'BUTTON') {
     var id = evt.target.closest('.map__pin').dataset.id || -1;
     if (id > -1) {
       addOffer(id);
@@ -133,7 +133,7 @@ var addDivAvatarClick = function () {
 };
 
 var removeOffer = function () {
-  if (map.querySelector('.map__card') !== null) {
+  if (map.querySelector('.map__card')) {
     map.querySelector('.popup__close').removeEventListener('click', onClosePopupClick);
     map.querySelector('.map__card').remove();
   }
