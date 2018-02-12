@@ -266,6 +266,15 @@ price.addEventListener('input', function () {
   checkElementValue(price, parseInt(price.value, 10), price.min, price.max);
 });
 
+price.addEventListener('invalid', function () {
+  if (price.value === '') {
+    checkElementValue(price, -1, price.min, price.max);
+    price.setCustomValidity('Введите цену.');
+  } else {
+    price.setCustomValidity('');
+  }
+});
+
 notice.querySelector('#room_number').addEventListener('input', onRoomNumberInput);
 
 var timeIn = notice.querySelector('#timein');
