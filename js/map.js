@@ -45,6 +45,8 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var PHOTOS_MIN = 1;
 var PHOTOS_MAX = 3;
 var SHIFT_Y = -35;
+var TITLE_TEXT_INVALID = 'Введите заголовок.';
+var PRICE_TEXT_INVALID = 'Введите цену.';
 
 var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
@@ -211,6 +213,8 @@ var enableViewMap = function () {
   });
   addButtonsAvatar();
   addDivAvatarClick();
+  onPriceValid();
+  onTitleValid();
 };
 
 var onRoomNumberInput = function (evt) {
@@ -232,6 +236,23 @@ var checkElementValue = function (node, value, min, max) {
   } else {
     node.style.border = '';
   }
+};
+
+var validElement = function (node, min, max, textInvalid) {
+  if (node.value === '') {
+    checkElementValue(node, -1, min, max);
+    price.setCustomValidity(textInvalid);
+  } else {
+    price.setCustomValidity('');
+  }
+};
+
+var onPriceValid = function () {
+  validElement(price, price.min, price.max, PRICE_TEXT_INVALID);
+};
+
+var onTitleValid = function () {
+  validElement(title, title.minLength, title.maxLength, TITLE_TEXT_INVALID);
 };
 
 // последовательность свободных номеров аватаров
@@ -266,14 +287,7 @@ price.addEventListener('input', function () {
   checkElementValue(price, parseInt(price.value, 10), price.min, price.max);
 });
 
-price.addEventListener('invalid', function () {
-  if (price.value === '') {
-    checkElementValue(price, -1, price.min, price.max);
-    price.setCustomValidity('Введите цену.');
-  } else {
-    price.setCustomValidity('');
-  }
-});
+price.addEventListener('invalid', onPriceValid);
 
 notice.querySelector('#room_number').addEventListener('input', onRoomNumberInput);
 
