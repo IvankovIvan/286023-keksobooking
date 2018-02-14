@@ -5,6 +5,15 @@
   var getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min) + min);
   };
+
+  var checkElementValue = function (node, value, min, max) {
+    if (value < min || value > max) {
+      node.style.border = 'thin dotted red';
+    } else {
+      node.style.border = '';
+    }
+  };
+
   window.util = {
     getRandomInt: getRandomInt,
     // возвращает массив последовательность чисел
@@ -19,6 +28,15 @@
     getArrayValue: function (arr) {
       var number = window.util.getRandomInt(0, arr.length - 1);
       return arr.splice(number, 1)[0];
-    }
+    },
+    validElement: function (node, min, max, textInvalid) {
+      if (node.value === '') {
+        checkElementValue(node, -1, min, max);
+        node.setCustomValidity(textInvalid);
+      } else {
+        node.setCustomValidity('');
+      }
+    },
+    checkElementValue: checkElementValue
   };
 })();

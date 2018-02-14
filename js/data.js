@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var OFFERS_COUNT = 8;
   var PHOTOS_MIN = 1;
   var PHOTOS_MAX = 3;
   var LOCATION_X_MIN = 300;
@@ -80,7 +81,27 @@
     };
   };
 
+  // создания массива предлоежений
+  var createOffers = function (avatarNumberFreeArray) {
+    var offers = new Array(OFFERS_COUNT);
+    for (var i = 0; i < offers.length; i++) {
+      offers[i] = createOfferNew(avatarNumberFreeArray);
+    }
+    return offers;
+  };
+
+  var getMinPriceByType = function (type) {
+    var minValue = 0;
+    HOUSES.forEach(function (house) {
+      if (house.type === type) {
+        minValue = house.priceMin;
+      }
+    });
+    return minValue;
+  };
+
   window.data = {
-    createOfferNew: createOfferNew
+    createOffers: createOffers,
+    getMinPriceByType: getMinPriceByType
   };
 })();

@@ -2,7 +2,6 @@
 
 (function () {
 
-  var OFFERS_COUNT = 8;
   var AVATAR_MIN_NUMBER = 1;
   var AVATAR_MAX_NUMBER = 8;
   var FIRST_POINT = {x: 377, y: 430};
@@ -27,21 +26,9 @@
       typeRus: 'Дворец',
       priceMin: 10000
     }];
-  var ROOM_VS_GUESTS = {'1': [1], '2': [1, 2], '3': [1, 2, 3], '100': [0]};
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
   var SHIFT_Y = -35;
-  var TITLE_TEXT_INVALID = 'Введите заголовок.';
-  var PRICE_TEXT_INVALID = 'Введите цену.';
-
-  // создания массива предлоежений
-  var createOffers = function (avatarNumberFreeArray) {
-    var offers = new Array(OFFERS_COUNT);
-    for (var i = 0; i < offers.length; i++) {
-      offers[i] = window.data.createOfferNew(avatarNumberFreeArray);
-    }
-    return offers;
-  };
 
   // добавления кнопок аватаров
   var addButtonsAvatar = function () {
@@ -133,52 +120,13 @@
     });
     addButtonsAvatar();
     addDivAvatarClick();
-    onPriceValid();
-    onTitleValid();
-  };
-
-  var onRoomNumberInput = function (evt) {
-    var roomNumberCurrent = evt.target;
-    var capacityValue = notice.querySelector('#capacity');
-    capacityValue.querySelectorAll('option').forEach(function (option) {
-      option.disabled = (ROOM_VS_GUESTS[roomNumberCurrent.value].indexOf(parseInt(option.value, 10)) < 0);
-    });
-    var optionSelected = capacityValue.querySelector('option:checked');
-    if (optionSelected.disabled) {
-      optionSelected.selected = false;
-      capacityValue.querySelector('option:enabled').selected = true;
-    }
-  };
-
-  var checkElementValue = function (node, value, min, max) {
-    if (value < min || value > max) {
-      node.style.border = 'thin dotted red';
-    } else {
-      node.style.border = '';
-    }
-  };
-
-  var validElement = function (node, min, max, textInvalid) {
-    if (node.value === '') {
-      checkElementValue(node, -1, min, max);
-      price.setCustomValidity(textInvalid);
-    } else {
-      price.setCustomValidity('');
-    }
-  };
-
-  var onPriceValid = function () {
-    validElement(price, price.min, price.max, PRICE_TEXT_INVALID);
-  };
-
-  var onTitleValid = function () {
-    validElement(title, title.minLength, title.maxLength, TITLE_TEXT_INVALID);
+    window.form.open();
   };
 
   // последовательность свободных номеров аватаров
   var avatarNumberFreeArray = window.util.createArraySequence(AVATAR_MIN_NUMBER, AVATAR_MAX_NUMBER);
   // создания массива предлоежений
-  var offers = createOffers(avatarNumberFreeArray);
+  var offers = window.data.createOffers(avatarNumberFreeArray);
 
   var map = document.querySelector('.map');
   var notice = document.querySelector('.notice');
@@ -188,38 +136,4 @@
 
   var template = document.querySelector('template').content;
   var divButtonPing = document.querySelector('.map__pins');
-
-  var title = notice.querySelector('#title');
-  title.addEventListener('input', function () {
-    checkElementValue(title, title.value.length, title.minLength, title.maxLength);
-  });
-
-  var price = notice.querySelector('#price');
-  notice.querySelector('#type').addEventListener('change', function (evt) {
-    HOUSES.forEach(function (house) {
-      if (house.type === evt.target.value) {
-        price.min = house.priceMin;
-      }
-    });
-  });
-
-  price.addEventListener('input', function () {
-    checkElementValue(price, parseInt(price.value, 10), price.min, price.max);
-  });
-
-  price.addEventListener('invalid', onPriceValid);
-
-  notice.querySelector('#room_number').addEventListener('input', onRoomNumberInput);
-
-  var timeIn = notice.querySelector('#timein');
-  var timeOut = notice.querySelector('#timeout');
-
-  timeIn.addEventListener('change', function () {
-    timeOut.selectedIndex = timeIn.selectedIndex;
-  });
-
-  timeOut.addEventListener('change', function () {
-    timeIn.selectedIndex = timeOut.selectedIndex;
-  });
-
 })();
