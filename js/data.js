@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var AVATAR_MIN_NUMBER = 1;
   var AVATAR_MAX_NUMBER = 8;
   var OFFERS_COUNT = 8;

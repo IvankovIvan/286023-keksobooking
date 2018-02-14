@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   // добавления данных о предложениях
   var addOffer = function (offerCurrent, article) {
     var fragment = document.createDocumentFragment();

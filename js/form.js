@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+
+  var FIRST_POINT = {x: 377, y: 430};
   var ROOM_VS_GUESTS = {'1': [1], '2': [1, 2], '3': [1, 2, 3], '100': [0]};
   var PRICE_TEXT_INVALID = 'Введите цену.';
   var TITLE_TEXT_INVALID = 'Введите заголовок.';
@@ -35,6 +37,8 @@
     window.util.checkElementValue(title, title.value.length, title.minLength, title.maxLength);
   });
 
+  notice.querySelector('#address').value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
+
   var price = notice.querySelector('#price');
 
   // изменения типа жилья
@@ -62,7 +66,11 @@
   });
 
   window.form = {
-    open: function () {
+    enadled: function () {
+      notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+      notice.querySelectorAll('fieldset').forEach(function (note) {
+        note.classList.remove('disabled');
+      });
       onPriceValid();
       onTitleValid();
     }
