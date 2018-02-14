@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var AVATAR_MIN_NUMBER = 1;
+  var AVATAR_MAX_NUMBER = 8;
   var OFFERS_COUNT = 8;
   var PHOTOS_MIN = 1;
   var PHOTOS_MAX = 3;
@@ -100,8 +102,15 @@
     return minValue;
   };
 
+  // последовательность свободных номеров аватаров
+  var avatarNumberFreeArray = window.util.createArraySequence(AVATAR_MIN_NUMBER, AVATAR_MAX_NUMBER);
+  // создания массива предлоежений
+  var offers = createOffers(avatarNumberFreeArray);
+
   window.data = {
-    createOffers: createOffers,
-    getMinPriceByType: getMinPriceByType
+    offers: offers,
+    getMinPriceByType: getMinPriceByType,
+    getFeatures: FEATURES,
+    getHouses: HOUSES
   };
 })();
