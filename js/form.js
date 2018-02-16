@@ -66,7 +66,7 @@
   });
 
   window.form = {
-    enadled: function () {
+    show: function () {
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
         note.classList.remove('disabled');

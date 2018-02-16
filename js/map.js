@@ -36,10 +36,11 @@
     map.classList.remove('map--faded');
     window.pin.addButtonsAvatar(template.querySelector('.map__pin'));
     addDivAvatarClick();
-    window.form.enadled();
+    window.form.show();
   };
 
   var mapPinMain = map.querySelector('.map__pin--main');
   mapPinMain.addEventListener('mouseup', enableViewMap);
-
+  window.dragdrop.create(mapPinMain, mapPinMain);
+  //
 })();

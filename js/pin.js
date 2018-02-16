@@ -21,5 +21,4 @@
   window.pin = {
     addButtonsAvatar: addButtonsAvatar
   };
-
 })();
