@@ -37,7 +37,8 @@
     window.util.checkElementValue(title, title.value.length, title.minLength, title.maxLength);
   });
 
-  notice.querySelector('#address').value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
+  var address = notice.querySelector('#address');
+  address.value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
 
   var price = notice.querySelector('#price');
 
@@ -73,6 +74,7 @@
       });
       onPriceValid();
       onTitleValid();
-    }
+    },
+    address: address
   };
 })();

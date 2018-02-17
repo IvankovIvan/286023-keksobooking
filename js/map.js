@@ -41,6 +41,6 @@
 
   var mapPinMain = map.querySelector('.map__pin--main');
   mapPinMain.addEventListener('mouseup', enableViewMap);
-  window.dragdrop.create(mapPinMain, mapPinMain);
+  window.dragdrop.create(mapPinMain, map, window.form.address);
   //
 })();
