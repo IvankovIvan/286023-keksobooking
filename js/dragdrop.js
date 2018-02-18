@@ -31,7 +31,6 @@
 
           var x = 0;
 
-          console.log(element.offsetTop, rectPoint);
           if (element.offsetLeft < rectPoint.left) {
             x = rectPoint.left;
           } else if ((element.offsetLeft - shift.x) > rectPoint.right) {
