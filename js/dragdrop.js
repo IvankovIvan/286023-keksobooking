@@ -2,12 +2,12 @@
 
 (function () {
   window.dragdrop = {
-    create: function (element, mainWindow, input) {
+    create: function (element, mainWindow, input, rectPoint) {
       element.addEventListener('mousedown', function (evt) {
         evt.preventDefault();
 
+        var SHIFT_Y = 50;
         var writeInput = function (coordX, coordY) {
-          var SHIFT_Y = 50;
           input.value = 'x: ' + coordX + '; y: ' + (coordY + SHIFT_Y);
         };
 
@@ -31,9 +31,10 @@
 
           var x = 0;
 
-          if (element.offsetLeft < 0) {
-            x = 0;
-          } else if ((element.offsetLeft - shift.x) > width) {
+          console.log(element.offsetTop, rectPoint);
+          if (element.offsetLeft < rectPoint.left) {
+            x = rectPoint.left;
+          } else if ((element.offsetLeft - shift.x) > rectPoint.right) {
             x = element.offsetLeft;
 
           } else {
@@ -42,9 +43,9 @@
 
           var y = 0;
 
-          if (element.offsetTop < 0) {
-            y = 0;
-          } else if (element.offsetTop - shift.y >= height) {
+          if (element.offsetTop < rectPoint.top - SHIFT_Y) {
+            y = rectPoint.top - SHIFT_Y;
+          } else if (element.offsetTop - shift.y >= rectPoint.bottom - SHIFT_Y) {
             y = element.offsetTop;
           } else {
             y = (element.offsetTop - shift.y);
