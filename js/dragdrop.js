@@ -16,10 +16,6 @@
           y: evt.clientY
         };
 
-        var map = mainWindow.getBoundingClientRect();
-        var width = map.right - map.left;
-        var height = map.bottom - map.top;
-
         var onMouseMove = function (moveEvt) {
           moveEvt.preventDefault();
 
@@ -64,7 +60,7 @@
           upEvt.preventDefault();
           document.removeEventListener('mousemove', onMouseMove);
           document.removeEventListener('mouseup', onMouseUp);
-          writeInput(parseInt(element.style.left, 10), parseInt(element.style.top, 10));
+          writeInput(parseInt(element.offsetLeft, 10), parseInt(element.offsetTop, 10));
         };
 
         document.addEventListener('mousemove', onMouseMove);
