@@ -112,6 +112,12 @@
     offers: offers,
     getMinPriceByType: getMinPriceByType,
     getFeatures: FEATURES,
-    getHouses: HOUSES
+    getHouses: HOUSES,
+    rectPoint: {
+      left: LOCATION_X_MIN,
+      right: LOCATION_X_MAX,
+      top: LOCATION_Y_MIN,
+      bottom: LOCATION_Y_MAX
+    }
   };
 })();

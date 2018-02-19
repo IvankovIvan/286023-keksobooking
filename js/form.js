@@ -37,7 +37,8 @@
     window.util.checkElementValue(title, title.value.length, title.minLength, title.maxLength);
   });
 
-  notice.querySelector('#address').value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
+  var address = notice.querySelector('#address');
+  address.value = 'x: ' + FIRST_POINT.x + '; y: ' + FIRST_POINT.y;
 
   var price = notice.querySelector('#price');
 
@@ -66,13 +67,14 @@
   });
 
   window.form = {
-    enadled: function () {
+    show: function () {
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
         note.classList.remove('disabled');
       });
       onPriceValid();
       onTitleValid();
-    }
+    },
+    address: address
   };
 })();
