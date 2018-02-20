@@ -34,7 +34,7 @@
 
   // ввод заголовка
   title.addEventListener('input', function () {
-    window.util.checkElementValue(title, title.value.length, title.minLength, title.maxLength);
+    window.util.validElement(title, title.minLength, title.maxLength, TITLE_TEXT_INVALID);
   });
 
   var address = notice.querySelector('#address');
@@ -66,9 +66,29 @@
     timeIn.selectedIndex = timeOut.selectedIndex;
   });
 
+  var form = notice.querySelector('.notice__form');
+
+  var resetForm = function () {
+    mainData.forEach(function (valueCurrent) {
+      notice.querySelector('[name=' + valueCurrent.key + ']').value = valueCurrent.value;
+    })
+  };
+
+  form.addEventListener('submit', function (evt) {
+    var data = new FormData(form);
+    window.backend.save(resetForm, window.util.errorHandler,data);
+    evt.preventDefault();
+  });
+
+  var mainData = [];
+  var data = new FormData(form);
+  for (var key of data.keys()) {
+    mainData.push({key: key, value: data.get(key)});
+  }
+
   window.form = {
     show: function () {
-      notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+      form.classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
         note.classList.remove('disabled');
       });
