@@ -42,10 +42,6 @@
 
   var enableViewMap = function () {
     window.backend.load(renderMap, window.util.errorHandler);
-    // map.classList.remove('map--faded');
-    // window.pin.addButtonsAvatar(template.querySelector('.map__pin'));
-    // addDivAvatarClick();
-    // window.form.show();
   };
 
   var mapPinMain = map.querySelector('.map__pin--main');

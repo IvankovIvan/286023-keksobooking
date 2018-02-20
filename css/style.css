@@ -128,7 +128,7 @@ textarea:focus
 .features input[type=checkbox]
 {
     position: absolute;
-    left: -900em;
+    /*left: -900em;*/
 }
 
 .features label
