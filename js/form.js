@@ -80,7 +80,7 @@
     evt.preventDefault();
   });
 
-  form.querySelector('.form__reset').addEventListener('click',function (evt) {
+  form.querySelector('.form__reset').addEventListener('click', function (evt) {
     evt.preventDefault();
     resetForm();
   });
