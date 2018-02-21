@@ -80,6 +80,11 @@
     evt.preventDefault();
   });
 
+  form.querySelector('.form__reset').addEventListener('click',function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
+
 
   var createDefaultValue = function () {
     form.querySelectorAll('[name]').forEach(function (value) {
@@ -113,7 +118,7 @@
     show: function () {
       form.classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
-        note.classList.remove('disabled');
+        note.disabled = false;
       });
       onPriceValid();
       onTitleValid();
