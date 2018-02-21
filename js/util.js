@@ -8,11 +8,24 @@
   };
 
   var checkElementValue = function (node, value, min, max) {
-    if (value < min || value > max) {
+    if (parseInt(value, 10) < min || parseInt(value, 10) > max) {
       node.style.border = 'thin dotted red';
-    } else {
-      node.style.border = '';
+      return false;
     }
+    node.style.border = '';
+    return true;
+  };
+
+  var createErrorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   };
 
   window.util = {
@@ -31,13 +44,22 @@
       return arr.splice(number, 1)[0];
     },
     validElement: function (node, min, max, textInvalid) {
-      if (node.value === '') {
-        checkElementValue(node, -1, min, max);
+      var value = node.value.length;
+      if (node.type.toLocaleLowerCase() === 'number') {
+        if (node.value === '') {
+          value = -1;
+        } else {
+          value = node.value;
+        }
+      }
+
+      if (checkElementValue(node, value, min, max) === false) {
         node.setCustomValidity(textInvalid);
       } else {
         node.setCustomValidity('');
       }
     },
-    checkElementValue: checkElementValue
+    checkElementValue: checkElementValue,
+    errorHandler: createErrorHandler
   };
 })();

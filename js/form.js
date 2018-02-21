@@ -34,7 +34,7 @@
 
   // ввод заголовка
   title.addEventListener('input', function () {
-    window.util.checkElementValue(title, title.value.length, title.minLength, title.maxLength);
+    window.util.validElement(title, title.minLength, title.maxLength, TITLE_TEXT_INVALID);
   });
 
   var address = notice.querySelector('#address');
@@ -66,11 +66,59 @@
     timeIn.selectedIndex = timeOut.selectedIndex;
   });
 
+  var form = notice.querySelector('.notice__form');
+
+  var resetForm = function () {
+    mainData.forEach(function (valueCurrent) {
+      notice.querySelector('#' + valueCurrent.id)[valueCurrent.key] = valueCurrent.value;
+    });
+  };
+
+  form.addEventListener('submit', function (evt) {
+    var data = new FormData(form);
+    window.backend.save(resetForm, window.util.errorHandler, data);
+    evt.preventDefault();
+  });
+
+  form.querySelector('.form__reset').addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
+
+
+  var createDefaultValue = function () {
+    form.querySelectorAll('[name]').forEach(function (value) {
+      var valueCurent = {};
+      switch (value.tagName.toLocaleLowerCase()) {
+        case 'input':
+          if (value.type === 'checkbox') {
+            valueCurent = {id: value.id, type: 'input', key: 'checked', value: value.checked};
+          } else {
+            valueCurent = {id: value.id, type: 'input', key: 'value', value: value.value};
+          }
+          break;
+        case 'select':
+          valueCurent = {id: value.id, type: 'select', key: 'value', value: value.value};
+          break;
+        case 'textarea':
+          valueCurent = {id: value.id, type: 'textarea', key: 'value', value: value.value};
+          break;
+        default:
+      }
+      if (value.id !== 'address') {
+        mainData.push(valueCurent);
+      }
+    });
+  };
+
+  var mainData = [];
+  createDefaultValue();
+
   window.form = {
     show: function () {
-      notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+      form.classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
-        note.classList.remove('disabled');
+        note.disabled = false;
       });
       onPriceValid();
       onTitleValid();
