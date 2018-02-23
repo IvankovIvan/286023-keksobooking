@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   window.dragdrop = {
     create: function (element, mainWindow, input, rectPoint) {
       element.addEventListener('mousedown', function (evt) {
