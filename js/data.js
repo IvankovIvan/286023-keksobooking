@@ -67,9 +67,9 @@
   };
 
   var offers = [];
-
   var addOffers = function (offersArr) {
-    offersArr.forEach(function (value) {
+    offersArr.forEach(function (value, i) {
+      value.id = i;
       offers.push(value);
     });
   };
@@ -117,6 +117,9 @@
     filters.forEach(function (value) {
       newOffers = filterOffers(newOffers, value);
     });
+    if (newOffers.length > 5) {
+      newOffers = newOffers.slice(0, 5);
+    }
     return newOffers;
   };
 
