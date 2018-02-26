@@ -78,38 +78,54 @@
     return offers.slice(0, 3);
   };
 
+  var getFilterPrice = function (filterPrice) {
+    return function (offerPrice) {
+      switch (dicPrice[filterPrice.value]) {
+        case 'LOW':
+          if (offerPrice.offer.price < Price.LOW) {
+            return true;
+          }
+          break;
+        case 'HIGH':
+          if (offerPrice.offer.price > Price.HIGH) {
+            return true;
+          }
+          break;
+        case 'MIDDLE':
+          if (offerPrice.offer.price >= Price.LOW && offerPrice.offer.price <= Price.HIGH) {
+            return true;
+          }
+          break;
+        default:
+          break;
+      }
+      return false;
+    };
+  };
+
+  var getFilter = function (filterCurrent) {
+    if (filterCurrent.id[0] === 'f') {
+      return function (value) {
+        return value.offer.features.indexOf(dicFiltersToOffers[filterCurrent.id]) > -1;
+      };
+    } else {
+      // Если проверяем цену
+      if (dicFiltersToOffers[filterCurrent.id] === 'price') {
+        return getFilterPrice(filterCurrent);
+      } else {
+        return function (value) {
+          return value.offer[dicFiltersToOffers[filterCurrent.id]].toString() === filterCurrent.value;
+
+        };
+      }
+    }
+  };
+
   var filterOffers = function (offersCurrent, filterCurrent) {
     if (filterCurrent.value === 'any' || filterCurrent.value === false) {
       return offersCurrent;
     }
-    if (filterCurrent.id[0] === 'f') {
-      return offersCurrent.filter(function (value) {
-        return value.offer.features.indexOf(dicFiltersToOffers[filterCurrent.id]) > -1;
-      });
-    } else {
-      // Если проверяем цену
-      if (dicFiltersToOffers[filterCurrent.id] === 'price') {
-        // Если цена меньше минимальной
-        if (dicPrice[filterCurrent.value] === 'LOW') {
-          return offersCurrent.filter(function (value) {
-            return value.offer.price < Price.LOW;
-          });
-        } else if (dicPrice[filterCurrent.value] === 'HIGH') { // если цена больше
-          return offersCurrent.filter(function (value) {
-            return value.offer.price > Price.HIGH;
-          });
-        } else if (dicPrice[filterCurrent.value] === 'MIDDLE') { // если в промежутке
-          return offersCurrent.filter(function (value) {
-            return (value.offer.price <= Price.HIGH && value.offer.price >= Price.LOW);
-          });
-        }
-      } else {
-        return offersCurrent.filter(function (value) {
-          return value.offer[dicFiltersToOffers[filterCurrent.id]].toString() === filterCurrent.value;
-        });
-      }
-    }
-    return offersCurrent;
+    return offersCurrent.filter(getFilter(filterCurrent));
   };
 
   var getOffersByFilters = function (filters) {
