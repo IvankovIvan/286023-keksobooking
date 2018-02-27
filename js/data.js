@@ -9,25 +9,6 @@
     Y_MAX: 500
   };
 
-  var dicFiltersToOffers = {
-    'housing-type': 'type',
-    'housing-price': 'price',
-    'housing-rooms': 'rooms',
-    'housing-guests': 'guests',
-    'filter-wifi': 'wifi',
-    'filter-dishwasher': 'dishwasher',
-    'filter-parking': 'parking',
-    'filter-washer': 'washer',
-    'filter-elevator': 'elevator',
-    'filter-conditioner': 'conditioner'
-  };
-
-  var dicPrice = {
-    'middle': 'MIDDLE',
-    'low': 'LOW',
-    'high': 'HIGH'
-  };
-
   var Price = {
     LOW: 10000,
     HIGH: 50000
@@ -80,41 +61,34 @@
 
   var getFilterPrice = function (filterPrice) {
     return function (offerPrice) {
-      switch (dicPrice[filterPrice.value]) {
+      switch (filterPrice.value.toUpperCase()) {
         case 'LOW':
-          if (offerPrice.offer.price < Price.LOW) {
-            return true;
-          }
-          break;
+          return offerPrice.offer.price < Price.LOW;
         case 'HIGH':
-          if (offerPrice.offer.price > Price.HIGH) {
-            return true;
-          }
-          break;
+          return offerPrice.offer.price > Price.HIGH;
         case 'MIDDLE':
-          if (offerPrice.offer.price >= Price.LOW && offerPrice.offer.price <= Price.HIGH) {
-            return true;
-          }
-          break;
-        default:
-          break;
+          return offerPrice.offer.price >= Price.LOW && offerPrice.offer.price <= Price.HIGH;
       }
       return false;
     };
   };
 
+  var getFilterToField = function (filter) {
+    return filter.substring(filter.indexOf('-') + 1);
+  };
+
   var getFilter = function (filterCurrent) {
     if (filterCurrent.id[0] === 'f') {
       return function (value) {
-        return value.offer.features.indexOf(dicFiltersToOffers[filterCurrent.id]) > -1;
+        return value.offer.features.indexOf(getFilterToField(filterCurrent.id)) > -1;
       };
     } else {
       // Если проверяем цену
-      if (dicFiltersToOffers[filterCurrent.id] === 'price') {
+      if (getFilterToField(filterCurrent.id) === 'price') {
         return getFilterPrice(filterCurrent);
       } else {
         return function (value) {
-          return value.offer[dicFiltersToOffers[filterCurrent.id]].toString() === filterCurrent.value;
+          return value.offer[getFilterToField(filterCurrent.id)].toString() === filterCurrent.value;
 
         };
       }
