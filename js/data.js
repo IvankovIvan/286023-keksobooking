@@ -61,13 +61,14 @@
 
   var getFilterPrice = function (filterPrice) {
     return function (offerPrice) {
+      var price = offerPrice.offer.price;
       switch (filterPrice.value.toUpperCase()) {
         case 'LOW':
-          return offerPrice.offer.price < Price.LOW;
+          return price < Price.LOW;
         case 'HIGH':
-          return offerPrice.offer.price > Price.HIGH;
+          return price > Price.HIGH;
         case 'MIDDLE':
-          return offerPrice.offer.price >= Price.LOW && offerPrice.offer.price <= Price.HIGH;
+          return price >= Price.LOW && price <= Price.HIGH;
       }
       return false;
     };
@@ -82,17 +83,14 @@
       return function (value) {
         return value.offer.features.indexOf(getFilterToField(filterCurrent.id)) > -1;
       };
-    } else {
-      // Если проверяем цену
-      if (getFilterToField(filterCurrent.id) === 'price') {
-        return getFilterPrice(filterCurrent);
-      } else {
-        return function (value) {
-          return value.offer[getFilterToField(filterCurrent.id)].toString() === filterCurrent.value;
-
-        };
-      }
     }
+    // Если проверяем цену
+    if (getFilterToField(filterCurrent.id) === 'price') {
+      return getFilterPrice(filterCurrent);
+    }
+    return function (value) {
+      return value.offer[getFilterToField(filterCurrent.id)].toString() === filterCurrent.value;
+    };
   };
 
   var filterOffers = function (offersCurrent, filterCurrent) {

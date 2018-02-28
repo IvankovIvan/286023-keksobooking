@@ -20,7 +20,6 @@
         var onMouseMove = function (moveEvt) {
           moveEvt.preventDefault();
 
-
           var shift = {
             x: startCoords.x - moveEvt.clientX,
             y: startCoords.y - moveEvt.clientY
@@ -32,7 +31,6 @@
             x = rectPoint.left;
           } else if ((element.offsetLeft - shift.x) > rectPoint.right) {
             x = element.offsetLeft;
-
           } else {
             x = element.offsetLeft - shift.x;
           }

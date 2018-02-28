@@ -35,18 +35,17 @@
       switch (value.tagName.toLocaleLowerCase()) {
         case 'input':
           if (value.type === 'checkbox') {
-            valueCurent = {id: value.id, type: 'input', key: 'checked', value: value.checked};
+            valueCurent = {id: value.id, key: 'checked', value: value.checked};
           } else {
-            valueCurent = {id: value.id, type: 'input', key: 'value', value: value.value};
+            valueCurent = {id: value.id, key: 'value', value: value.value};
           }
           break;
         case 'select':
-          valueCurent = {id: value.id, type: 'select', key: 'value', value: value.value};
+          valueCurent = {id: value.id, key: 'value', value: value.value};
           break;
         case 'textarea':
-          valueCurent = {id: value.id, type: 'textarea', key: 'value', value: value.value};
+          valueCurent = {id: value.id, key: 'value', value: value.value};
           break;
-        default:
       }
       arrValue.push(valueCurent);
     });
@@ -71,11 +70,7 @@
     validElement: function (node, min, max, textInvalid) {
       var value = node.value.length;
       if (node.type.toLocaleLowerCase() === 'number') {
-        if (node.value === '') {
-          value = -1;
-        } else {
-          value = node.value;
-        }
+        value = node.value === '' ? -1 : node.value;
       }
 
       if (checkElementValue(node, value, min, max) === false) {

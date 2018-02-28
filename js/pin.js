@@ -6,20 +6,20 @@
 
   // добавления кнопок аватаров
   var addButtonsAvatar = function (offers) {
-    var divButtonPing = document.querySelector('.map__pins');
-    divButtonPing.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (value) {
+    var divButton = document.querySelector('.map__pins');
+    divButton.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (value) {
       value.remove();
     });
-    var mapPin = window.map.mapPinTemplate;
+    var map = window.map.mapPinTemplate;
     var fragment = document.createDocumentFragment();
     offers.forEach(function (offer) {
-      mapPin.style.left = offer.location.x + 'px';
-      mapPin.style.top = offer.location.y + SHIFT_Y + 'px';
-      mapPin.dataset.id = offer.id;
-      mapPin.querySelector('img').src = offer.author.avatar;
-      fragment.appendChild(mapPin.cloneNode(true));
+      map.style.left = offer.location.x + 'px';
+      map.style.top = offer.location.y + SHIFT_Y + 'px';
+      map.dataset.id = offer.id;
+      map.querySelector('img').src = offer.author.avatar;
+      fragment.appendChild(map.cloneNode(true));
     });
-    divButtonPing.appendChild(fragment);
+    divButton.appendChild(fragment);
   };
 
   var changeFilter = function () {

@@ -33,7 +33,7 @@
     }
   };
 
-  var renderMap = function (offers) {
+  var render = function (offers) {
     window.data.addOffers(offers);
     map.classList.remove('map--faded');
     window.pin.addButtonsAvatar(window.data.getOffers());
@@ -41,12 +41,12 @@
     window.form.show();
   };
 
-  var enableViewMap = function () {
-    window.backend.load(renderMap, window.util.errorHandler);
+  var onViewMapEnable = function () {
+    window.backend.load(render, window.util.errorHandler);
   };
 
   var mapPinMain = map.querySelector('.map__pin--main');
-  mapPinMain.addEventListener('mouseup', enableViewMap);
+  mapPinMain.addEventListener('mouseup', onViewMapEnable);
   window.dragdrop.create(mapPinMain, map, window.form.address, window.data.rectPoint);
 
   window.map = {

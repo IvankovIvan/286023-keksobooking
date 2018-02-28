@@ -66,7 +66,7 @@
     timeIn.selectedIndex = timeOut.selectedIndex;
   });
 
-  var form = notice.querySelector('.notice__form');
+  var noticeForm = notice.querySelector('.notice__form');
 
   var resetForm = function () {
     mainData.forEach(function (valueCurrent) {
@@ -74,20 +74,20 @@
     });
   };
 
-  form.addEventListener('submit', function (evt) {
-    var data = new FormData(form);
+  noticeForm.addEventListener('submit', function (evt) {
+    var data = new FormData(noticeForm);
     window.backend.save(resetForm, window.util.errorHandler, data);
     evt.preventDefault();
   });
 
-  form.querySelector('.form__reset').addEventListener('click', function (evt) {
+  noticeForm.querySelector('.form__reset').addEventListener('click', function (evt) {
     evt.preventDefault();
     resetForm();
   });
 
 
   var createDefaultValue = function () {
-    window.util.getValueFromForm(form).forEach(function (value) {
+    window.util.getValueFromForm(noticeForm).forEach(function (value) {
       if (value.id !== 'address') {
         mainData.push(value);
       }
@@ -99,7 +99,7 @@
 
   window.form = {
     show: function () {
-      form.classList.remove('notice__form--disabled');
+      noticeForm.classList.remove('notice__form--disabled');
       notice.querySelectorAll('fieldset').forEach(function (note) {
         note.disabled = false;
       });

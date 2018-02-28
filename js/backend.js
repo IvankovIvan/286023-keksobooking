@@ -1,9 +1,11 @@
 'use strict';
 
 (function () {
-  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
-  var URL_SAVE = 'https://js.dump.academy/keksobooking';
 
+  var Url = {
+    LOAD: 'https://js.dump.academy/keksobooking/data',
+    SAVE: 'https://js.dump.academy/keksobooking'
+  };
   var loadData = function (onSuccess, onError, method, body) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -28,10 +30,10 @@
     var url;
     switch (method) {
       case 'GET' :
-        url = URL_LOAD;
+        url = Url.LOAD;
         break;
       case 'POST' :
-        url = URL_SAVE;
+        url = Url.SAVE;
         break;
       default:
         onError('Ошибка.');
