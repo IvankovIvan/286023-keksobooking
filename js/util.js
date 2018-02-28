@@ -28,6 +28,31 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  var getValueFromForm = function (form) {
+    var arrValue = [];
+    form.querySelectorAll('[name]').forEach(function (value) {
+      var valueCurent = {};
+      switch (value.tagName.toLocaleLowerCase()) {
+        case 'input':
+          if (value.type === 'checkbox') {
+            valueCurent = {id: value.id, type: 'input', key: 'checked', value: value.checked};
+          } else {
+            valueCurent = {id: value.id, type: 'input', key: 'value', value: value.value};
+          }
+          break;
+        case 'select':
+          valueCurent = {id: value.id, type: 'select', key: 'value', value: value.value};
+          break;
+        case 'textarea':
+          valueCurent = {id: value.id, type: 'textarea', key: 'value', value: value.value};
+          break;
+        default:
+      }
+      arrValue.push(valueCurent);
+    });
+    return arrValue;
+  };
+
   window.util = {
     getRandomInt: getRandomInt,
     // возвращает массив последовательность чисел
@@ -60,6 +85,7 @@
       }
     },
     checkElementValue: checkElementValue,
-    errorHandler: createErrorHandler
+    errorHandler: createErrorHandler,
+    getValueFromForm: getValueFromForm
   };
 })();

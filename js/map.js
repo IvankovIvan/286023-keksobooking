@@ -4,6 +4,7 @@
 
   var map = document.querySelector('.map');
   var template = document.querySelector('template').content;
+  var mapPinTemplate = template.querySelector('.map__pin');
 
   var onClosePopupClick = function () {
     removeOffer();
@@ -35,7 +36,7 @@
   var renderMap = function (offers) {
     window.data.addOffers(offers);
     map.classList.remove('map--faded');
-    window.pin.addButtonsAvatar(template.querySelector('.map__pin'));
+    window.pin.addButtonsAvatar(window.data.getOffers());
     addDivAvatarClick();
     window.form.show();
   };
@@ -47,5 +48,8 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   mapPinMain.addEventListener('mouseup', enableViewMap);
   window.dragdrop.create(mapPinMain, map, window.form.address, window.data.rectPoint);
-  //
+
+  window.map = {
+    mapPinTemplate: mapPinTemplate
+  };
 })();

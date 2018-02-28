@@ -87,26 +87,9 @@
 
 
   var createDefaultValue = function () {
-    form.querySelectorAll('[name]').forEach(function (value) {
-      var valueCurent = {};
-      switch (value.tagName.toLocaleLowerCase()) {
-        case 'input':
-          if (value.type === 'checkbox') {
-            valueCurent = {id: value.id, type: 'input', key: 'checked', value: value.checked};
-          } else {
-            valueCurent = {id: value.id, type: 'input', key: 'value', value: value.value};
-          }
-          break;
-        case 'select':
-          valueCurent = {id: value.id, type: 'select', key: 'value', value: value.value};
-          break;
-        case 'textarea':
-          valueCurent = {id: value.id, type: 'textarea', key: 'value', value: value.value};
-          break;
-        default:
-      }
+    window.util.getValueFromForm(form).forEach(function (value) {
       if (value.id !== 'address') {
-        mainData.push(valueCurent);
+        mainData.push(value);
       }
     });
   };
