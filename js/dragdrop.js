@@ -5,9 +5,10 @@
   window.dragdrop = {
     create: function (element, mainWindow, input, rectPoint) {
       element.addEventListener('mousedown', function (evt) {
+        var SHIFT_Y = 50;
+
         evt.preventDefault();
 
-        var SHIFT_Y = 50;
         var writeInput = function (coordX, coordY) {
           input.value = 'x: ' + coordX + '; y: ' + (coordY + SHIFT_Y);
         };

@@ -2,6 +2,9 @@
 
 (function () {
 
+  var SUCCESS_CODE = 200;
+  var TIMEOUT = 10000;
+
   var Url = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
     SAVE: 'https://js.dump.academy/keksobooking'
@@ -10,7 +13,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === SUCCESS_CODE) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа:' + xhr.status + ' ' + xhr.statusText);
@@ -25,7 +28,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'mc');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = TIMEOUT;
 
     var url;
     switch (method) {

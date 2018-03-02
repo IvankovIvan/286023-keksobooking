@@ -37,6 +37,8 @@
       priceMin: 10000
     }];
 
+  var offers = [];
+
   var getMinPriceByType = function (type) {
     var minValue = 0;
     HOUSES.forEach(function (house) {
@@ -47,7 +49,6 @@
     return minValue;
   };
 
-  var offers = [];
   var addOffers = function (offersArr) {
     offersArr.forEach(function (value, i) {
       value.id = i;
